@@ -206,6 +206,7 @@ namespace Ipfs.Http
                         Name = l["Name"]?.ToString() ?? throw new InvalidDataException("The response did not contain a name."),
                         Id = l["Hash"]?.ToString() ?? throw new InvalidDataException("The response did not contain a hash."),
                         Size = l["Size"] is { } sz ? sz.ToObject<ulong>() : throw new InvalidDataException("The response did not contain a size."),
+                        IsDirectory = l["Type"] is { } t ? t.ToObject<int>() == 1 : false, // This information is returned by the API, but was not by the core library.
                     })
                     .ToArray();
             }

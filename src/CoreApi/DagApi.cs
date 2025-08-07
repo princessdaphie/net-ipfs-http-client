@@ -154,14 +154,15 @@ namespace Ipfs.Http
 
         public Task<Stream> ExportAsync(string path, CancellationToken cancellationToken = default)
         {
-            return ipfs.DownloadAsync("dag/export", cancellationToken, path);
+            return ipfs.PostDownloadAsync("dag/export", cancellationToken, path);
         }
 
-        public async Task<CarImportOutput> ImportAsync(Stream stream, bool? pinRoots = null, bool stats = false, CancellationToken cancellationToken = default)
+        public async Task<CarImportOutput> ImportAsync(Stream stream, bool? pinRoots = null, bool stats = false, bool allowBigBlock = false, CancellationToken cancellationToken = default)
         {
             string[] options = [
                 $"pin-roots={pinRoots.ToString().ToLowerInvariant()}",
-                $"stats={stats.ToString().ToLowerInvariant()}"
+                $"stats={stats.ToString().ToLowerInvariant()}",
+                $"allow-big-block={allowBigBlock.ToString().ToLowerInvariant()}"
             ];
 
             using var resultStream = await ipfs.Upload2Async("dag/import", cancellationToken, stream, null, options);
